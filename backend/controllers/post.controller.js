@@ -3,12 +3,6 @@ import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary";
 
-
-/**
- * Create a new post with optional text and/or image.
- * Validates input, uploads image to Cloudinary if present,
- * and associates the post with the current user.
- */
 export const createPost = async (req, res) => {
 	try {
 		const { text } = req.body;
@@ -41,11 +35,6 @@ export const createPost = async (req, res) => {
 	}
 };
 
-/**
- * Delete a post by ID.
- * Ensures only the post's creator can delete it and
- * removes the associated image from Cloudinary if present.
- */
 export const deletePost = async (req, res) => {
 	try {
 		const post = await Post.findById(req.params.id);
@@ -71,11 +60,6 @@ export const deletePost = async (req, res) => {
 	}
 };
 
-/**
- * Add a comment to a post.
- * Requires non-empty text input and validates post existence.
- * Adds the comment to the post's comments array.
- */
 export const commentOnPost = async (req, res) => {
 	try {
 		const { text } = req.body;
@@ -103,12 +87,6 @@ export const commentOnPost = async (req, res) => {
 	}
 };
 
-
-/**
- * Toggle like/unlike status for a post by the current user.
- * Updates both the post and user documents, and creates
- * a notification when a post is liked.
- */
 export const likeUnlikePost = async (req, res) => {
 	try {
 		const userId = req.user._id;
@@ -126,7 +104,9 @@ export const likeUnlikePost = async (req, res) => {
 			// Unlike post
 			await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
 			await User.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
-			res.status(200).json({ message: "Post unliked successfully" });
+
+			const updatedLikes = post.likes.filter((id) => id.toString() !== userId.toString());
+			res.status(200).json(updatedLikes);
 		} else {
 			// Like post
 			post.likes.push(userId);
@@ -140,7 +120,8 @@ export const likeUnlikePost = async (req, res) => {
 			});
 			await notification.save();
 
-			res.status(200).json({ message: "Post liked successfully" });
+			const updatedLikes = post.likes;
+			res.status(200).json(updatedLikes);
 		}
 	} catch (error) {
 		console.log("Error in likeUnlikePost controller: ", error);
@@ -148,10 +129,6 @@ export const likeUnlikePost = async (req, res) => {
 	}
 };
 
-/**
- * Fetch all posts from the database, sorted by creation date.
- * Populates user and comment user details, excluding passwords.
- */
 export const getAllPosts = async (req, res) => {
 	try {
 		const posts = await Post.find()
@@ -176,12 +153,6 @@ export const getAllPosts = async (req, res) => {
 	}
 };
 
-
-/**
- * Retrieve all posts liked by a specific user.
- * Validates the user and fetches corresponding posts,
- * including user and comment user information.
- */
 export const getLikedPosts = async (req, res) => {
 	const userId = req.params.id;
 
@@ -206,11 +177,6 @@ export const getLikedPosts = async (req, res) => {
 	}
 };
 
-
-/**
- * Fetch posts created by users followed by the current user.
- * Validates current user, retrieves following list, and fetches posts.
- */
 export const getFollowingPosts = async (req, res) => {
 	try {
 		const userId = req.user._id;
@@ -237,11 +203,6 @@ export const getFollowingPosts = async (req, res) => {
 	}
 };
 
-
-/**
- * Get all posts from a user by their username.
- * Validates the username and fetches posts authored by the user.
- */
 export const getUserPosts = async (req, res) => {
 	try {
 		const { username } = req.params;
