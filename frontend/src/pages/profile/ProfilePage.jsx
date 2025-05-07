@@ -9,7 +9,7 @@ import { POSTS } from "../../utils/db/dummy";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
-import { FaLink } from "react-icons/fa";
+// import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/date";
@@ -173,23 +173,24 @@ const ProfilePage = () => {
 									{user?.link && (
 										<div className='flex gap-1 items-center '>
 											<>
-												<FaLink className='w-3 h-3 text-slate-500' />
-												<a
+												{/* <FaLink className='w-3 h-3 text-slate-500' /> */}
+												{/* <a
 													href=''
 													target='_blank'
 													rel='noreferrer'
 													className='text-sm text-blue-500 hover:underline'
-												>
-													
-												</a>
+												>	
+												</a> */}
 											</>
 										</div>
 									)}
+									
 									<div className='flex gap-2 items-center'>
 										<IoCalendarOutline className='w-4 h-4 text-slate-500' />
 										<span className='text-sm text-slate-500'>{memberSinceDate}</span>
 									</div>
 								</div>
+								
 								<div className='flex gap-2'>
 									<div className='flex gap-1 items-center'>
 										<span className='font-bold text-xs'>{user?.following.length}</span>
