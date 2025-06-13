@@ -9,7 +9,7 @@ A modern, full-featured Twitter clone built with the MERN stack. Includes JWT au
 
 ![Dashboard Preview](frontend/public/preview.png) 
 --
-🌍 Live Demo - https://twitter-clone-4s7l.onrender.com
+🌍 Live Demo - https://x-clone-smr.onrender.com/
 
 ---
 
